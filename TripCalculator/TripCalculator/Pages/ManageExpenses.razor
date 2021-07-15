@@ -1,0 +1,63 @@
+﻿@page "/manageexpenses"
+@inject ManageExpensesViewModel manageExpensesViewModel
+@inject ManageStudentsViewModel manageStudentsViewModel
+
+<h3>Manage Expenses</h3>
+
+<label>Add new Expenses</label>
+<EditForm Model="@Expense" OnValidSubmit="AddExpense">
+    <label>Expense Name</label>
+    <div>
+        <InputText @bind-Value="Expense.Name" />
+    </div>
+
+    <label>Cost</label>
+    <div>
+        <InputNumber @bind-Value="Expense.Cost" />
+    </div>
+
+    <label>Select Student</label>
+    <div>
+        <InputSelect @bind-Value=@SelectedStudentId>
+            <option value="">-- NONE --</option>
+            @foreach (var student in manageStudentsViewModel.Students)
+            {
+                <option value="@student.Id">@student.Name</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+</EditForm>
+
+<div class="container">
+    <button type="submit" class="btn btn-primary" @onclick="manageExpensesViewModel.CommitChanges">Commit Changes</button>
+</div>
+
+<label>Expenses</label>
+<div class="container-fluid">
+    @foreach (var expense in manageExpensesViewModel.Expenses)
+    {
+    <div class="row">
+        <span>@expense.Name</span>
+        <span>$@expense.Cost</span>
+        <span>@expense.Student.Name</span>
+    </div>
+    }
+</div>
+
+@code {
+    public Expense Expense { get; set; } = new();
+    public int SelectedStudentId { get; set; }
+
+    public void AddExpense()
+    {
+        var selectedStudent = manageStudentsViewModel.Students.FirstOrDefault(x => x.Id == SelectedStudentId);
+        if (selectedStudent == null) return;
+        Expense.Student = selectedStudent;
+
+        manageExpensesViewModel.AddExpense(Expense);
+        Expense = new();
+        SelectedStudentId = 0;
+    }
+}
