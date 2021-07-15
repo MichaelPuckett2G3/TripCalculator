@@ -1,4 +1,35 @@
 ﻿@page "/"
-
+@inject ManageExpensesViewModel manageExpensesViewModel
 <h1>Trip Calculator</h1>
 
+<ManageStudents />
+<ManageExpenses />
+
+<label>Add Expense To Trip</label>
+<div>
+    <InputSelect @bind-Value=@SelectedExpenseId>
+        <option value="">-- NONE --</option>
+        @foreach (var expense in manageExpensesViewModel.Expenses)
+        {
+            <option value="@expense.Id">@expense.Name</option>
+        }
+    </InputSelect>
+    <button class="btn btn-primary" @onclick="AddExpense">Add Expense</button>
+</div>
+
+@code {
+    public Trip Trip { get; set; } = new Trip();
+    public int SelectedExpenseId { get; set; }
+    public void AddExpense()
+    {
+        var expense = manageExpensesViewModel.Expenses.FirstOrDefault(x => x.Id == SelectedExpenseId);
+        if (expense == null) return;
+        Trip.Expenses.Add(expense);
+        SelectedExpenseId = 0;
+    }
+
+    public void CalculateTrip()
+    {
+        tripCalculator.CalculateTrip(Trip);
+    }
+}

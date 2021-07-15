@@ -21,7 +21,7 @@ namespace TripCalculator.ViewModels
 
         public void AddExpense(Expense expense)
         {
-            expense.Id = tripDb.Students.Count + 1;
+            expense.Id = tripDb.Expenses.Count + 1;
             expenses.Add(expense);
         }
 
