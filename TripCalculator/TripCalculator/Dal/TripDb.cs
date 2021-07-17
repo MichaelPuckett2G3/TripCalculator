@@ -1,5 +1,6 @@
 ﻿using Specky.Attributes;
 using System.Collections.Generic;
+using System.Linq;
 using TripCalculator.Models;
 
 namespace TripCalculator.Dal
@@ -10,7 +11,7 @@ namespace TripCalculator.Dal
         public TripDb()
         {
             Students = MockStudents();
-            Expenses = new HashSet<Expense>();
+            Expenses = MockExpenses();
             Trips = new HashSet<Trip>();
         }
 
@@ -22,26 +23,101 @@ namespace TripCalculator.Dal
                 new()
                 {
                     Id = id++,
-                    Name = "Michael Puckett"
+                    Name = "Louis"
                 },
                 new()
                 {
                     Id = id++,
-                    Name = "Chris Gainey"
+                    Name = "Carter"
                 },
                  new()
                 {
                     Id = id++,
-                    Name = "Cory Powell"
+                    Name = "David"
+                }
+            };
+
+            return students;
+        }
+
+        private ICollection<Expense> MockExpenses()
+        {
+            var id = 0;
+            var expenses = new List<Expense>
+            {
+                new()
+                {
+                    Id = id++,
+                    Name = "Food",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 5.75M
                 },
                 new()
                 {
                     Id = id++,
-                    Name = "Erin Puckett"
+                    Name = "Gas",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 35.00M
                 },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Tickets",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 12.79M
+                },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Food",
+                    Student = Students.First(student => student.Name.Equals("Carter")),
+                    Cost = 12.00M
+                },
+                new()
+                {
+                    Id = id++,
+                    Name = "Shirt",
+                    Student = Students.First(student => student.Name.Equals("Carter")),
+                    Cost = 15.00M
+                },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Gas",
+                    Student = Students.First(student => student.Name.Equals("Carter")),
+                    Cost = 23.239M
+                },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Food",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 10.00M
+                },
+                new()
+                {
+                    Id = id++,
+                    Name = "Gas",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 20.00M
+                },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Tickets",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 38.41M
+                },
+                 new()
+                {
+                    Id = id++,
+                    Name = "Fees",
+                    Student = Students.First(student => student.Name.Equals("Louis")),
+                    Cost = 45.00M
+                }
             };
 
-            return students;
+            return expenses;
         }
 
         public ICollection<Student> Students { get; set; }
