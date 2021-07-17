@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Specky.AspNetCore.Extensions;
+using TripCalculator.Dal;
+using TripCalculator.ViewModels;
 
 namespace TripCalculator
 {

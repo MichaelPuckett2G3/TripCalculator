@@ -17,6 +17,7 @@ namespace TripCalculator.ViewModels
             this.tripDb = tripDb;
             expenses = tripDb.Expenses.ToList();
         }
+
         public IEnumerable<Expense> Expenses => expenses;
 
         public void AddExpense(Expense expense)

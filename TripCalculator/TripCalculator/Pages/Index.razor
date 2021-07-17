@@ -1,12 +1,10 @@
 ﻿@page "/"
 @inject ManageExpensesViewModel manageExpensesViewModel
+@inject ITripCalculator tripCalculator; 
 <h1>Trip Calculator</h1>
 
-<ManageStudents />
-<ManageExpenses />
-
 <label>Add Expense To Trip</label>
-<div>
+<EditForm Model="Trip">
     <InputSelect @bind-Value=@SelectedExpenseId>
         <option value="">-- NONE --</option>
         @foreach (var expense in manageExpensesViewModel.Expenses)
@@ -15,7 +13,7 @@
         }
     </InputSelect>
     <button class="btn btn-primary" @onclick="AddExpense">Add Expense</button>
-</div>
+</EditForm>
 
 @code {
     public Trip Trip { get; set; } = new Trip();
@@ -30,6 +28,6 @@
 
     public void CalculateTrip()
     {
-        //tripCalculator.CalculateTrip(Trip);
+        var report = tripCalculator.CalculateDebt(Trip);
     }
 }

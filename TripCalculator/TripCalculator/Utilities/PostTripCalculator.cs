@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using Specky.Attributes;
 
 namespace TripCalculator.Utilities
 {
+    [Speck]
     public class PostTripCalculator : ITripCalculator
     {
         private const decimal LowestThreshold = 0.01M;

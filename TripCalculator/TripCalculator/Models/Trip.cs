@@ -6,8 +6,9 @@ namespace TripCalculator.Models
     {
         public Trip()
         {
-
+            Expenses = new HashSet<Expense>();
         }
+
         public int Id { get; set; }
         public string Destination { get; set; }
         public ICollection<Expense> Expenses { get; set; }
