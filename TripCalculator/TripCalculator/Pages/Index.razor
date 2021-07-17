@@ -1,33 +1,36 @@
 ﻿@page "/"
 @inject ManageExpensesViewModel manageExpensesViewModel
 @inject ITripCalculator tripCalculator;
-<h1>Trip Calculator</h1>
+@inject Dal.IMockTrip tripMocker;
 
-<label>Add Expense To Trip</label>
-<EditForm Model="Trip">
-    <InputSelect @bind-Value=@SelectedExpenseId>
-        <option value="">-- NONE --</option>
-        @foreach (var expense in manageExpensesViewModel.Expenses)
-        {
-            <option value="@expense.Id">@expense.Name</option>
-        }
-    </InputSelect>
-    <button class="btn btn-primary" @onclick="AddExpense">Add Expense</button>
-</EditForm>
-<button class="btn btn-primary" @onclick="CalculateTrip">Calculate Trip</button>
+<div class="text-center">
+    <h1>Trip Calculator</h1>
 
-<h2>Trip Expenses</h2>
-@if (Trip?.Expenses != null)
-{
-    <label>Expense</label>
-    @foreach (var expense in Trip.Expenses)
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ManageStudents />
+            </div>
+            <div class="col">
+                <ManageExpenses />
+            </div>
+        </div>
+    </div>
+
+    <h2>Trip Details</h2>
+    
+    <button class="btn btn-secondary" @onclick="LoadMockTrip">Load Mock</button>
+    <button class="btn btn-primary" @onclick="CalculateTrip">Calculate Trip</button>
+    <h2>Trip Expenses</h2>
+    @if (Trip?.Expenses is not null)
     {
-        <p>@expense.Student.Name has expense for @expense.Name at $@expense.Cost.ToString("C")</p>
+        <label>Expense</label>
+        @foreach (var expense in Trip.Expenses)
+        {
+            <p>@expense.Student.Name has expense for @expense.Name at @expense.Cost.ToString("C")</p>
+        }
     }
-}
-
-<div>
-    @if (MoneyDebtReport != null)
+    @if (MoneyDebtReport is not null)
     {
         <label>Debtors</label>
         @foreach (var debtor in MoneyDebtReport.Debtors)
@@ -38,7 +41,7 @@
         <label>Creditors</label>
         @foreach (var creditor in MoneyDebtReport.Creditors)
         {
-            <p>@creditor.Student.Name owes @creditor.Amount.ToString("C")</p>
+            <p>@creditor.Student.Name receives @creditor.Amount.ToString("C")</p>
         }
     }
 </div>
@@ -59,5 +62,10 @@
     public void CalculateTrip()
     {
         MoneyDebtReport = tripCalculator.CalculateDebt(Trip);
+    }
+
+    public void LoadMockTrip()
+    {
+        Trip = tripMocker.GetTrip();
     }
 }

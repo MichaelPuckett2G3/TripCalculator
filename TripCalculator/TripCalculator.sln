@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripCalculator", "TripCalculator\TripCalculator.csproj", "{EC1429B1-1F0B-4EA3-9D93-3063B35904EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripCalculator.Tests", "TripCalculator.Tests\TripCalculator.Tests.csproj", "{2E836F5D-BFA3-4ACB-9716-15AA063437C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TripCalculator.Tests", "TripCalculator.Tests\TripCalculator.Tests.csproj", "{2E836F5D-BFA3-4ACB-9716-15AA063437C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

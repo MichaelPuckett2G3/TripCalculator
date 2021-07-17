@@ -17,13 +17,27 @@ namespace TripCalculator.Utilities
             if (trip.Expenses is null) throw new ArgumentNullException($"{nameof(Trip)}.{nameof(Trip.Expenses)}");
             if (trip.Expenses.Any(expense => expense.Student is null)) throw new ArgumentNullException($"{nameof(Trip)}.{nameof(Trip.Expenses)}.{nameof(Expense.Student)}");
 
-            var individualExpense = trip.Expenses.Sum(x => x.Cost) / trip.Expenses.Select(x => x.Student).Distinct().Count();
+            int numberOfStudents = trip.Expenses.Select(x => x.Student).Distinct().Count();
+
+            if (numberOfStudents == 0) return new MoneyDebtReport(Enumerable.Empty<MoneyTracker>(), Enumerable.Empty<MoneyTracker>(), Enumerable.Empty<MoneyDebt>());
+
+            var individualExpense = trip.Expenses.Sum(x => x.Cost) / numberOfStudents;
 
             // Reduce the need to calculate the dictionary only once
             var studentExpenseDictionary = trip
                 .Expenses
                 .GroupBy(x => x.Student)
                 .ToDictionary(studentExpenses => studentExpenses.Key, studentExpenses => studentExpenses.ToList().Sum(s => s.Cost));
+
+            var debtorsInitial = studentExpenseDictionary
+                .Where(w => w.Value < individualExpense)
+                .Select(d => new MoneyTracker(d.Key, individualExpense - d.Value))
+                .ToList();
+
+            var creditorsInitial = studentExpenseDictionary
+                .Where(w => w.Value > individualExpense)
+                .Select(c => new MoneyTracker(c.Key, c.Value - individualExpense))
+                .ToList();
 
             var debtors = studentExpenseDictionary
                 .Where(w => w.Value < individualExpense)
@@ -64,7 +78,7 @@ namespace TripCalculator.Utilities
                 }
             }
 
-            return new MoneyDebtReport(creditors, debtors, result);
+            return new MoneyDebtReport(creditorsInitial, debtorsInitial, result);
         }
     }
 }

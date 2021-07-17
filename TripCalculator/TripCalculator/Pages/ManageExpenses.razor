@@ -1,23 +1,23 @@
-﻿@page "/manageexpenses"
-@inject ManageExpensesViewModel manageExpensesViewModel
+﻿@inject ManageExpensesViewModel manageExpensesViewModel
 @inject ManageStudentsViewModel manageStudentsViewModel
 
 <h3>Manage Expenses</h3>
 
-<label>Add new Expenses</label>
+<label>Add New Expenses</label>
 <EditForm Model="@Expense" OnValidSubmit="AddExpense">
-    <label>Expense Name</label>
-    <div>
-        <InputText @bind-Value="Expense.Name" />
+    <div class="input-group">
+        <InputText class="form-control" @bind-Value="Expense.Name" />
+        <label class="input-group-text">Expense Name</label>
     </div>
 
-    <label>Cost</label>
-    <div>
-        <InputNumber @bind-Value="Expense.Cost" />
+    <div class="input-group">
+        <label class="input-group-text">$</label>
+        <InputNumber class="form-control" @bind-Value="Expense.Cost" />
+        <label class="input-group-text">Cost</label>
     </div>
 
-    <label>Select Student</label>
-    <div>
+    <div class="input-group">
+        <button type="submit" class="btn btn-primary btn-outline-dark">Add</button>
         <InputSelect @bind-Value=@SelectedStudentId>
             <option value="">-- NONE --</option>
             @foreach (var student in manageStudentsViewModel.Students)
@@ -25,14 +25,9 @@
                 <option value="@student.Id">@student.Name</option>
             }
         </InputSelect>
+        <label class="input-group-text">Select Student</label>
     </div>
-
-    <button type="submit" class="btn btn-primary">Add</button>
 </EditForm>
-
-<div class="container">
-    <button type="submit" class="btn btn-primary" @onclick="manageExpensesViewModel.CommitChanges">Commit Changes</button>
-</div>
 
 <label>Expenses</label>
 <div class="container-fluid">
@@ -57,7 +52,11 @@
         Expense.Student = selectedStudent;
 
         manageExpensesViewModel.AddExpense(Expense);
+        manageExpensesViewModel.CommitChanges();
+
         Expense = new();
         SelectedStudentId = 0;
+
+        InvokeAsync(StateHasChanged);
     }
 }
