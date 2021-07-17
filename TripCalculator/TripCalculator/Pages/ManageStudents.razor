@@ -22,6 +22,8 @@
 
     public void AddStudent()
     {
+        if (string.IsNullOrWhiteSpace(Student?.Name)) return;
+
         manageStudentsViewModel.AddStudent(Student);
         Student = new();
 
