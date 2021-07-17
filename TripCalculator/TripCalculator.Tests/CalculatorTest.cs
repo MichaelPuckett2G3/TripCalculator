@@ -9,10 +9,10 @@ namespace TripCalculator.Tests
     public class CalculatorTest
     {
         [TestMethod]
-        public void Calculate()
+        public void BaseCalculateTest()
         {
             // Arrange
-            Utilities.TripCalculator actor = new();
+            Utilities.PostTripCalculator actor = new();
             IList<Student> students = MockStudents();
             var tripId = 0;
             Trip trip = new()
@@ -21,29 +21,69 @@ namespace TripCalculator.Tests
                 Expenses = new List<Expense>()
                 {
                     // Michael Pucket - 37
-                    new Expense() { Id = tripId++, Name = "Food", Cost=15, Student=students[0]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=12, Student=students[0]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=10, Student=students[0]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=15M, Student=students[0]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=12M, Student=students[0]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10M, Student=students[0]},
                     // Chris Gainey - 30
-                    new Expense() { Id = tripId++, Name = "Food", Cost=13, Student=students[1]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=9, Student=students[1]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=8, Student=students[1]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=13M, Student=students[1]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=9M, Student=students[1]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=8M, Student=students[1]},
                     // Cory Powell - 55
-                    new Expense() { Id = tripId++, Name = "Food", Cost=10, Student=students[2]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=20, Student=students[2]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=25, Student=students[2]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10M, Student=students[2]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=20M, Student=students[2]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=25M, Student=students[2]},
                     // Erin Puckett - 45
-                    new Expense() { Id = tripId++, Name = "Food", Cost=15, Student=students[3]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=10, Student=students[3]},
-                    new Expense() { Id = tripId++, Name = "Food", Cost=20, Student=students[3]}
+                    new Expense() { Id = tripId++, Name = "Food", Cost=15M, Student=students[3]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10M, Student=students[3]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=20M, Student=students[3]}
                 }
             };
 
             // Act
-            var result = actor.Calculate(trip);
+            var result = actor.CalculateDebt(trip);
 
             // Assert
-            Assert.IsTrue(result.Any(a => a.Debtor.Name == "Chris Gainey"));
+            Assert.IsTrue(result.Debtors.Any(a => a.Student.Name == "Chris Gainey"));
+            Assert.AreEqual(3.25M, result.DebtRecord.Where(w => w.Creditor.Name.Equals("Erin Puckett")).Sum(s => s.Amount));
+            Assert.AreEqual(13.25M, result.DebtRecord.Where(w => w.Creditor.Name.Equals("Cory Powell")).Sum(s => s.Amount));
+        }
+
+        [TestMethod]
+        public void CalculateReturnsMoneyDebtWithinOneFullCent()
+        {
+            // Arrange
+            Utilities.PostTripCalculator actor = new();
+            IList<Student> students = MockStudents();
+            var tripId = 0;
+            Trip trip = new()
+            {
+                Destination = "Hollywood",
+                Expenses = new List<Expense>()
+                {
+                    // Michael Pucket - 37
+                    new Expense() { Id = tripId++, Name = "Food", Cost=15.12M, Student=students[0]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=12.99M, Student=students[0]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10.00M, Student=students[0]},
+                    // Chris Gainey - 30
+                    new Expense() { Id = tripId++, Name = "Food", Cost=13.01M, Student=students[1]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=9.55M, Student=students[1]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=8.87M, Student=students[1]},
+                    // Cory Powell - 55
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10.10M, Student=students[2]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=20.34M, Student=students[2]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=25.50M, Student=students[2]},
+                    // Erin Puckett - 45
+                    new Expense() { Id = tripId++, Name = "Food", Cost=15.00M, Student=students[3]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=10.11M, Student=students[3]},
+                    new Expense() { Id = tripId++, Name = "Food", Cost=20.75M, Student=students[3]}
+                }
+            };
+
+            // Act
+            var result = actor.CalculateDebt(trip);
+
+            // Assert
+            Assert.IsTrue((result.TotalCredit - result.DebtRecord.Sum(dr => dr.Amount)) <= 0.1M);
         }
         private static IList<Student> MockStudents()
         {

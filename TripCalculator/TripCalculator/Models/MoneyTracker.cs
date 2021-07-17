@@ -2,13 +2,13 @@
 {
     public class MoneyTracker
     {
-        public MoneyTracker(Student student, double amount)
+        public MoneyTracker(Student student, decimal amount)
         {
             Student = student;
             Amount = amount;
         }
 
         public Student Student { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }

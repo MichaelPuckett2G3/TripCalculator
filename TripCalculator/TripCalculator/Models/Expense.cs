@@ -3,7 +3,7 @@
     public class Expense
     {
         public int Id { get; set; }
-        public double Cost { get; set; }
+        public decimal Cost { get; set; }
         public string Name { get; set; }
         public Student Student { get; set; }
     }
