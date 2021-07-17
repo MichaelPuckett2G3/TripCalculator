@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TripCalculator.Models;
@@ -85,6 +86,47 @@ namespace TripCalculator.Tests
             // Assert
             Assert.IsTrue((result.TotalCredit - result.DebtRecord.Sum(dr => dr.Amount)) <= 0.1M);
         }
+
+        [TestMethod]
+        public void NullParameterCheckTest()
+        {
+            // Arrange
+            Utilities.PostTripCalculator actor = new();
+
+            // Act and Assert
+            Assert.ThrowsException<ArgumentNullException>(() => actor.CalculateDebt(null));
+        }
+
+        [TestMethod]
+        public void NullExpensesCheckTest()
+        {
+            // Arrange
+            Utilities.PostTripCalculator actor = new();
+            Trip trip = new()
+            {
+                Destination = null,
+                Expenses = null
+            };
+
+            // Act and Assert
+            Assert.ThrowsException<ArgumentNullException>(() => actor.CalculateDebt(trip));
+        }
+
+        [TestMethod]
+        public void NullStudentsCheckTest()
+        {
+            // Arrange
+            Utilities.PostTripCalculator actor = new();
+            Trip trip = new()
+            {
+                Destination = null,
+                Expenses = new List<Expense>() { new(), new(), new() }
+            };
+
+            // Act and Assert
+            Assert.ThrowsException<ArgumentNullException>(() => actor.CalculateDebt(trip));
+        }
+
         private static IList<Student> MockStudents()
         {
             var id = 0;

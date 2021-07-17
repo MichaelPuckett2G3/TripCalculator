@@ -11,9 +11,13 @@ namespace TripCalculator.Utilities
 
         public MoneyDebtReport CalculateDebt(Trip trip)
         {
+            if (trip is null) throw new ArgumentNullException(nameof(Trip));
+            if (trip.Expenses is null) throw new ArgumentNullException($"{nameof(Trip)}.{nameof(Trip.Expenses)}");
+            if (trip.Expenses.Any(expense => expense.Student is null)) throw new ArgumentNullException($"{nameof(Trip)}.{nameof(Trip.Expenses)}.{nameof(Expense.Student)}");
+
             var individualExpense = trip.Expenses.Sum(x => x.Cost) / trip.Expenses.Select(x => x.Student).Distinct().Count();
 
-            // This is technically an inline temporary variable, but it reduces the need to calculate the dictionary only once.
+            // Reduce the need to calculate the dictionary only once
             var studentExpenseDictionary = trip
                 .Expenses
                 .GroupBy(x => x.Student)
