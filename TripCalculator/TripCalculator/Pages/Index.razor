@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inject ManageExpensesViewModel manageExpensesViewModel
-@inject ITripCalculator tripCalculator; 
+@inject ITripCalculator tripCalculator;
 <h1>Trip Calculator</h1>
 
 <label>Add Expense To Trip</label>
@@ -14,10 +14,40 @@
     </InputSelect>
     <button class="btn btn-primary" @onclick="AddExpense">Add Expense</button>
 </EditForm>
+<button class="btn btn-primary" @onclick="CalculateTrip">Calculate Trip</button>
+
+<h2>Trip Expenses</h2>
+@if (Trip?.Expenses != null)
+{
+    <label>Expense</label>
+    @foreach (var expense in Trip.Expenses)
+    {
+        <p>@expense.Student.Name has expense for @expense.Name at $@expense.Cost.ToString("C")</p>
+    }
+}
+
+<div>
+    @if (MoneyDebtReport != null)
+    {
+        <label>Debtors</label>
+        @foreach (var debtor in MoneyDebtReport.Debtors)
+        {
+            <p>@debtor.Student.Name owes @debtor.Amount.ToString("C")</p>
+        }
+
+        <label>Creditors</label>
+        @foreach (var creditor in MoneyDebtReport.Creditors)
+        {
+            <p>@creditor.Student.Name owes @creditor.Amount.ToString("C")</p>
+        }
+    }
+</div>
 
 @code {
     public Trip Trip { get; set; } = new Trip();
     public int SelectedExpenseId { get; set; }
+    public MoneyDebtReport MoneyDebtReport { get; set; }
+
     public void AddExpense()
     {
         var expense = manageExpensesViewModel.Expenses.FirstOrDefault(x => x.Id == SelectedExpenseId);
@@ -28,6 +58,6 @@
 
     public void CalculateTrip()
     {
-        var report = tripCalculator.CalculateDebt(Trip);
+        MoneyDebtReport = tripCalculator.CalculateDebt(Trip);
     }
 }
