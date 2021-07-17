@@ -1,23 +1,21 @@
 ﻿@page "/managestudents"
 @inject ManageStudentsViewModel manageStudentsViewModel
 
-<h3>Manage Students</h3>
 
-<label>Add new Student</label>
-<EditForm Model="@Student" OnValidSubmit="AddStudent">
-    <label>Student Name</label>
-    <InputText @bind-Value="Student.Name" />
+<label class="h2 py-3">Students</label>
+<EditForm class="input-group" Model="@Student" OnValidSubmit="AddStudent">
+    <label class="input-group-text">Student Name</label>
+    <InputText class="form-control" @bind-Value="Student.Name" />
 
     <button type="submit" class="btn btn-primary">Add</button>
 </EditForm>
 
-<label>Students</label>
-<div>
+<ul class="list-group py-lg-1">
     @foreach (var student in manageStudentsViewModel.Students)
     {
-        <span>@student.Name</span>
+        <li class="list-group-item">@student.Name</li>
     }
-</div>
+</ul>
 
 @code {
     public Student Student { get; set; } = new();
