@@ -13,11 +13,12 @@
     <div class="container-fluid py-1">
         <div class="row">
             <div class="col border-left border-right border-3 border-dark rounded">
+                <h2 class="h2">Students</h2>
                 <ManageStudents />
             </div>
             <div class="col border-left border-right border-3 border-dark rounded">
-                <h2>Trip Expenses</h2>
-                <EditForm class="py-md-2" Model="@Expense" OnValidSubmit="AddExpense">
+                <h2 class="h2">Trip Expenses</h2>
+                <EditForm class="card-group" Model="@Expense" OnValidSubmit="AddExpense">
                     <div class="input-group">
                         <InputText class="form-control" @bind-Value="Expense.Name" />
                         <label class="input-group-text">Expense Name</label>
