@@ -29,5 +29,11 @@ namespace TripCalculator.ViewModels
         {
             foreach (var student in Students) tripDb.Students.Add(student);
         }
+
+        public void RemoveAllStudents()
+        {
+            tripDb.Students.Clear();
+            students.Clear();
+        }
     }
 }

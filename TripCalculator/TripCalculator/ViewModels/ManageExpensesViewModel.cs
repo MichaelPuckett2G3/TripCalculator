@@ -30,5 +30,11 @@ namespace TripCalculator.ViewModels
         {
             foreach (var expense in Expenses) tripDb.Expenses.Add(expense);
         }
+
+        public void RemoveAllExpenses()
+        {
+            tripDb.Expenses.Clear();
+            expenses.Clear();
+        }
     }
 }
