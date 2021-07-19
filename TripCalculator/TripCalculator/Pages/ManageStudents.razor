@@ -1,8 +1,6 @@
 ﻿@page "/managestudents"
 @inject ManageStudentsViewModel manageStudentsViewModel
 
-
-<label class="h2 py-3">Students</label>
 <EditForm class="input-group" Model="@Student" OnValidSubmit="AddStudent">
     <label class="input-group-text">Student Name</label>
     <InputText class="form-control" @bind-Value="Student.Name" />
